@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from 'react-native';
-import { supabase } from '../services/supabase';
+import { supabase } from '../SupabaseConfig';
 
 export default function Login({ navigation }) {
   const [email, setEmail] = useState('');
@@ -42,6 +42,10 @@ export default function Login({ navigation }) {
 
       <TouchableOpacity style={styles.button} onPress={handleLogin}>
         <Text style={styles.buttonText}>Entrar</Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity style={{ marginTop: 12 }} onPress={() => navigation.navigate('Cadastro')}>
+        <Text style={{ color: '#4a90e2' }}>Ainda não tem conta? Cadastre-se</Text>
       </TouchableOpacity>
     </View>
   );

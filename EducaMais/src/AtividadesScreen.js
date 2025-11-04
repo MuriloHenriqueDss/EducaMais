@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, FlatList, TouchableOpacity, StyleSheet, Alert } from "react-native";
-import { supabase } from "../supabase";
+import { supabase } from "../SupabaseConfig";
 
 export default function AtividadesTurma({ route, navigation }) {
   const { turma } = route.params;

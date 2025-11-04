@@ -11,6 +11,8 @@ import AtividadesTurma from "./src/ClassesScreen";
 import CadastrarAtividade from "./src/CadastrarAtividadeScreen";
 import AtividadesScreen from "./src/AtividadesScreen";
 import ClassesScreen from "./src/ClassesScreen";
+import ProfessoresScreen from "./src/ProfessoresScreen";
+import Cadastro from "./src/CadastroScreen";
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();

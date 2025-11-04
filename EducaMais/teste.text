@@ -1,0 +1,97 @@
+-- Cria tabela de professores (id será igual ao id do auth.user)
+create table if not exists public.professores (
+  id uuid primary key,
+  nome text not null,
+  email text,
+  created_at timestamptz default now()
+);
+
+-- Cria tabela de turmas
+create table if not exists public.turmas (
+  id uuid primary key default gen_random_uuid(),
+  nome text not null,
+  professor_id uuid not null references public.professores(id) on delete cascade,
+  created_at timestamptz default now()
+);
+
+-- Cria tabela de atividades
+create table if not exists public.atividades (
+  id uuid primary key default gen_random_uuid(),
+  descricao text not null,
+  turma_id uuid not null references public.turmas(id) on delete cascade,
+  created_at timestamptz default now()
+);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-- Habilita RLS
+alter table public.turmas enable row level security;
+
+-- Permite inserção somente se o professor_id for igual ao usuário autenticado
+create policy turmas_insert_owner on public.turmas
+  for insert
+  with check (auth.uid() = professor_id);
+
+-- Permite selecionar apenas turmas do próprio professor
+create policy turmas_select_owner on public.turmas
+  for select
+  using (professor_id = auth.uid());
+
+-- Permite update/delete apenas para o dono
+create policy turmas_modify_owner on public.turmas
+  for update, delete
+  using (professor_id = auth.uid())
+  with check (professor_id = auth.uid());
+
+
+
+
+
+
+
+
+  alter table public.atividades enable row level security;
+
+-- Select: somente se a turma pertence ao usuário
+create policy atividades_select_owner on public.atividades
+  for select
+  using (
+    exists (
+      select 1 from public.turmas t where t.id = turma_id and t.professor_id = auth.uid()
+    )
+  );
+
+-- Insert: somente se a turma (new.turma_id) pertence ao usuário
+create policy atividades_insert_owner on public.atividades
+  for insert
+  with check (
+    exists (
+      select 1 from public.turmas t where t.id = new.turma_id and t.professor_id = auth.uid()
+    )
+  );
+
+-- Update/Delete: somente se a atividade pertence a uma turma do usuário
+create policy atividades_modify_owner on public.atividades
+  for update, delete
+  using (
+    exists (
+      select 1 from public.turmas t where t.id = turma_id and t.professor_id = auth.uid()
+    )
+  )
+  with check (
+    exists (
+      select 1 from public.turmas t where t.id = new.turma_id and t.professor_id = auth.uid()
+    )
+  );

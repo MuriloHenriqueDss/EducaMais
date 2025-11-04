@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { View, TextInput, TouchableOpacity, Text, StyleSheet, Alert } from "react-native";
-import { supabase } from "../supabase";
+import { supabase } from "../SupabaseConfig";
 
 export default function CadastrarAtividade({ route, navigation }) {
   const { turmaId } = route.params;

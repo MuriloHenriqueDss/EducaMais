@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, FlatList, TouchableOpacity, StyleSheet, Alert } from "react-native";
-import { supabase } from "../supabase";
-
+import { supabase } from "../SupabaseConfig";
 export default function PrincipalProfessor({ navigation }) {
   const [turmas, setTurmas] = useState([]);
   const [usuario, setUsuario] = useState(null);
